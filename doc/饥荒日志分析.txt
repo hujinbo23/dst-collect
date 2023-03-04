@@ -1,0 +1,37 @@
+Client authenticated: (KU_Mt-zrX8K) 猜猜我是谁 
+
+[Join Announcement] 猜猜我是谁
+
+ Spawn request: wurt from 猜猜我是谁
+
+[00:12:16]: [Leave Announcement] 猜猜我是谁
+
+[00:11:24]: [Death Announcement] 猜猜我是谁 死于： 黑暗。她变成了可怕的鬼魂！
+[00:11:18]: [Resurrect Announcement] 猜猜我是谁 复活自： 绚丽之门.
+
+
+[00:08:09]: New incoming connection 254.114.58.202|1 <3038807712282216944>
+[00:08:09]: Client connected from 254.114.58.202|1 <3038807712282216944>
+[00:08:09]: ValidateGameSessionToken GUID<3038807712282216944>
+[00:08:10]: Client authenticated: (KU_Mt-zrX8K) 猜猜我是谁
+[00:08:10]: [Steam] SendUserConnectAndAuthenticate for '76561198860853633'
+[00:08:10]: [Steam] Authenticated client '76561198860853633'
+[00:08:12]: There is no active event to validate against.
+[00:08:12]: [Shard] Read save location file for (KU_Mt-zrX8K)
+[00:08:30]: [Join Announcement] 猜猜我是谁
+
+玩家日志
+id name role kuId steamId type descption time createdDate updateDate 
+
+> 监控地面（洞穴的是一样） server_chat_log
+
+房间日志
+id time createdDate updateDate
+id time createdDate updateDate
+
+> 监控地面的 server_log.txt。通过 [00:08:30] 来得到房间的天数
+> 玩家信息 科雷Id，steamId,  角色
+
+
+
+CGO_ENABLED=1 GOARCH=amd64  CC=x86_64-linux-musl-gcc  CXX=x86_64-linux-musl-g++ go build main.go

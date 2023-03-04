@@ -61,7 +61,7 @@ func CountActiveUser(ctx *gin.Context) {
 	if unit == "DAY" {
 		sql1 := `
 		select
-			count(name) as count,created_at as date
+			count(distinct name) as count,created_at as date
 		from player_logs
 		where created_at between ? and ?
 		group by strftime('%m',created_at),strftime('%d',created_at)

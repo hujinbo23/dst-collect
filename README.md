@@ -1,1 +1,4 @@
-go run .\main.go path=C:\Users\xm\Documents\Klei\DoNotStarveTogether\900587905\Cluster_2
+# 饥荒联机版玩家日志采集
+
+
+![首页预览](./doc/index.png)
