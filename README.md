@@ -1,0 +1,1 @@
+go run .\main.go path=C:\Users\xm\Documents\Klei\DoNotStarveTogether\900587905\Cluster_2
