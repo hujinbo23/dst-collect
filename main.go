@@ -1,17 +1,20 @@
 package main
 
 import (
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
 
+	"gopkg.in/yaml.v3"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
 	"dst-dashboard/api"
 	"dst-dashboard/collect"
+	"dst-dashboard/config"
 	"dst-dashboard/entity"
 	"dst-dashboard/middleware"
 	"fmt"
@@ -57,8 +60,24 @@ func arg() {
 	fmt.Println("db", db)
 }
 
+var configData *config.Config
+
+func InitConfig() {
+	yamlFile, err := ioutil.ReadFile("./config.yml")
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	var _config *config.Config
+	err = yaml.Unmarshal(yamlFile, &_config)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	configData = _config
+	fmt.Println(_config)
+}
+
 func iniiDB() {
-	db, err := gorm.Open(sqlite.Open(db), &gorm.Config{
+	db, err := gorm.Open(sqlite.Open(configData.Db), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
@@ -69,7 +88,8 @@ func iniiDB() {
 }
 
 func main() {
-	arg()
+	//arg()
+	InitConfig()
 	iniiDB()
 
 	go tailf_server_log()
@@ -99,23 +119,13 @@ func main() {
 		statistics.GET("/rate/role", api.CountRoleRate)
 	}
 
-	app.Run(port)
-
-	// arr := strings.Split(text, " ")
-	// fmt.Println("len", len(arr))
-	// fmt.Println(0, arr[0])
-	// fmt.Println(1, arr[1])
-	// fmt.Println(2, arr[2])
-	// fmt.Println(3, arr[3])
-	// fmt.Println(4, arr[4])
-	// fmt.Println(5, arr[5])
-	// fmt.Println(arr)
+	app.Run(":" + configData.Port)
 
 }
 
 func tailf_server_chat_log() {
 	//fileName := "C:\\Users\\xm\\Documents\\Klei\\DoNotStarveTogether\\900587905\\Cluster_2\\Master\\server_chat_log.txt"
-	fileName := server_chat_log
+	fileName := filepath.Join(configData.Path, "Master", "server_chat_log.txt")
 	config := tail.Config{
 		ReOpen:    true,                                 // 重新打开
 		Follow:    true,                                 // 是否跟随
@@ -143,7 +153,7 @@ func tailf_server_chat_log() {
 
 func tailf_server_log() {
 	//fileName := "C:\\Users\\xm\\Documents\\Klei\\DoNotStarveTogether\\900587905\\Cluster_2\\Master\\server_log.txt"
-	fileName := server_log
+	fileName := filepath.Join(configData.Path, "Master", "server_log.txt")
 	config := tail.Config{
 		ReOpen:    true,                                 // 重新打开
 		Follow:    true,                                 // 是否跟随
