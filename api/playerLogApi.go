@@ -20,10 +20,10 @@ func PlayerLogQueryPage(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "10"))
 
-	if page < 1 {
-		page = 1
+	if page < 0 {
+		page = 0
 	}
-	if size < 10 {
+	if size < 0 {
 		size = 10
 	}
 
@@ -39,7 +39,7 @@ func PlayerLogQueryPage(ctx *gin.Context) {
 		db = db.Where("steamId LIKE ?", "%"+steamId+"%")
 	}
 
-	db = db.Order("created_at desc").Limit(size).Offset((page - 1) * size)
+	db = db.Order("created_at desc").Limit(size).Offset((page) * size)
 
 	playerLogs := make([]entity.PlayerLog, 0)
 
@@ -48,11 +48,24 @@ func PlayerLogQueryPage(ctx *gin.Context) {
 	}
 
 	fmt.Println("name:", name, "kuId", kuId, "steamId", steamId)
+	var total int64
+	db2 := entity.DB
+	db2.Model(&entity.PlayerLog{}).Count(&total)
+	totalPages := total / int64(size)
+	if total%int64(size) != 0 {
+		totalPages++
+	}
 
 	ctx.JSON(http.StatusOK, vo.Response{
 		Code: 200,
 		Msg:  "success",
-		Data: playerLogs,
+		Data: vo.Page{
+			Data:       playerLogs,
+			Page:       page,
+			Size:       size,
+			Total:      total,
+			TotalPages: totalPages,
+		},
 	})
 
 }
