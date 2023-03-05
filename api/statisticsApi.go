@@ -157,9 +157,9 @@ func TopUserActiveTimes(ctx *gin.Context) {
 	var data []TopStatistics
 	sql := `
 	select 
-		max(id) as id,count(distinct name) as count, name, ku_id, steam_id, role, action_desc, created_at
+		max(id) as id,count(name) as count, name, ku_id, steam_id, role, action_desc, created_at
 	from player_logs
-	where created_at between ? and ?
+	where created_at between ? and ? and action like '[JoinAnnouncement]'
 	group by name order by count(id) DESC limit ?
 	`
 	db.Raw(sql, startDate, endDate, N).Scan(&data)
@@ -239,7 +239,7 @@ func CountRoleRate(ctx *gin.Context) {
 	select 
 		role as role, count(distinct name) as count
 	from player_logs
-	where created_at between ? and ?
+	where role != '' and created_at between ? and ?
 	group by role
 	`
 	db.Raw(sql, startDate, endDate).Scan(&data)
