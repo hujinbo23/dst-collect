@@ -1,9 +1,9 @@
 package api
 
 import (
-	"dst-dashboard/entity"
-	"dst-dashboard/utils"
-	"dst-dashboard/vo"
+	"dst-collect/entity"
+	"dst-collect/utils"
+	"dst-collect/vo"
 	"fmt"
 	"net/http"
 	"time"

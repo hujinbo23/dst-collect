@@ -1,7 +1,7 @@
 package collect
 
 import (
-	"dst-dashboard/entity"
+	"dst-collect/entity"
 	"fmt"
 	"strings"
 

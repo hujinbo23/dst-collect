@@ -1,8 +1,8 @@
 package api
 
 import (
-	"dst-dashboard/entity"
-	"dst-dashboard/vo"
+	"dst-collect/entity"
+	"dst-collect/vo"
 	"fmt"
 	"net/http"
 	"strconv"
