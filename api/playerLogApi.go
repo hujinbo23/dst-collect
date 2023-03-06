@@ -50,7 +50,11 @@ func PlayerLogQueryPage(ctx *gin.Context) {
 	fmt.Println("name:", name, "kuId", kuId, "steamId", steamId)
 	var total int64
 	db2 := entity.DB
-	db2.Model(&entity.PlayerLog{}).Count(&total)
+	if name != "" {
+		db2.Model(&entity.PlayerLog{}).Where("name like ?", "%"+name+"%").Count(&total)
+	} else {
+		db2.Model(&entity.PlayerLog{}).Count(&total)
+	}
 	totalPages := total / int64(size)
 	if total%int64(size) != 0 {
 		totalPages++
