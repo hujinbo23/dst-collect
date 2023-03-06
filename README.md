@@ -13,10 +13,10 @@ db: dst-collect.db
 ```
 
 ### windows
-执行运行 dst-dashboard.exe
+执行运行 dst-collect.exe
 
 ### linux
-./dst-dashboard 或者运行 ./run.sh
+./dst-collect 或者运行 ./run.sh
 
 ## 展示
 ![首页预览](./doc/index.png)
