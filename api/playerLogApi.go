@@ -20,8 +20,8 @@ func PlayerLogQueryPage(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "10"))
 
-	if page < 0 {
-		page = 0
+	if page <= 0 {
+		page = 1
 	}
 	if size < 0 {
 		size = 10
@@ -39,7 +39,7 @@ func PlayerLogQueryPage(ctx *gin.Context) {
 		db = db.Where("steamId LIKE ?", "%"+steamId+"%")
 	}
 
-	db = db.Order("created_at desc").Limit(size).Offset((page) * size)
+	db = db.Order("created_at desc").Limit(size).Offset((page - 1) * size)
 
 	playerLogs := make([]entity.PlayerLog, 0)
 
