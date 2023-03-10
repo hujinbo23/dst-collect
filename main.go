@@ -119,7 +119,6 @@ func main() {
 		statistics.GET("/rate/role", api.CountRoleRate)
 	}
 
-
 	// dir, _ := os.Getwd()
 	app.LoadHTMLGlob("dist/index.html") // 添加入口index.html
 	//r.LoadHTMLFiles("dist//*") // 添加资源路径
@@ -239,12 +238,16 @@ func tailf_server_log() {
 					fmt.Println(3, text)
 					// 解析 KU 和 用户名
 					str := strings.Split(text, " ")
-					ku := str[3]
-					ku = ku[1 : len(ku)-1]
-					name := str[4]
-					connect.Name = name
-					connect.KuId = ku
-					fmt.Println("ku", ku, "name", name)
+					if len(str) < 4 {
+						log.Println("[EROOR] str 解析错误: ", str)
+					} else {
+						ku := str[3]
+						ku = ku[1 : len(ku)-1]
+						name := str[4]
+						connect.Name = name
+						connect.KuId = ku
+						fmt.Println("ku", ku, "name", name)
+					}
 				} else if i == 4 {
 					fmt.Println(4, text)
 					// 解析 steamId
