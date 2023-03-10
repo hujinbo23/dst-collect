@@ -3,9 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"net/http"
-	"os"
 	"path/filepath"
-	"strconv"
 
 	"gopkg.in/yaml.v3"
 	"gorm.io/driver/sqlite"
@@ -24,41 +22,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hpcloud/tail"
 )
-
-var server_chat_log string
-var server_log string
-var db string = "test.db"
-var port string = ":8081"
-
-func arg() {
-	for idx, args := range os.Args {
-		split := strings.Split(args, "=")
-		if len(split) == 2 {
-			argName := strings.TrimSpace(split[0])
-			if argName == "path" {
-				argValue := strings.TrimSpace(split[1])
-				value := argValue
-
-				server_chat_log = filepath.Join(value, "Master", "server_chat_log.txt")
-				server_log = filepath.Join(value, "Master", "server_log.txt")
-			}
-			if argName == "db" {
-				argValue := strings.TrimSpace(split[1])
-				value := argValue
-				db = value
-			}
-			if argName == "port" {
-				argValue := strings.TrimSpace(split[1])
-				value := argValue
-				port = ":" + value
-			}
-		}
-		fmt.Println("参数"+strconv.Itoa(idx)+":", args)
-	}
-	fmt.Println("server_chat_log", server_chat_log)
-	fmt.Println("server_log", server_log)
-	fmt.Println("db", db)
-}
 
 var configData *config.Config
 
