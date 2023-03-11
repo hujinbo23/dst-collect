@@ -201,7 +201,7 @@ func tailf_server_log() {
 					fmt.Println(3, text)
 					// 解析 KU 和 用户名
 					str := strings.Split(text, " ")
-					if len(str) < 4 {
+					if len(str) <= 4 {
 						log.Println("[EROOR] str 解析错误: ", str)
 					} else {
 						ku := str[3]
