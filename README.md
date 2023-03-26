@@ -20,3 +20,4 @@ db: dst-collect.db
 
 ## 展示
 ![首页预览](./doc/index.png)
+![玩家日志](./doc/log.png)
