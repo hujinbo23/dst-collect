@@ -3,6 +3,8 @@ package main
 import (
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"path/filepath"
 
 	"gopkg.in/yaml.v3"
@@ -47,7 +49,22 @@ func iniiDB() {
 		panic("failed to connect database")
 	}
 	entity.DB = db
-	entity.DB.AutoMigrate(&entity.Spawn{}, &entity.PlayerLog{}, &entity.Connect{})
+	entity.DB.AutoMigrate(&entity.Spawn{}, &entity.PlayerLog{}, &entity.Connect{}, &entity.Proxy{})
+
+	proxyEntities := []entity.Proxy{}
+	db.Find(&proxyEntities)
+
+	if len(proxyEntities) > 0 {
+		for _, proxyEntity := range proxyEntities {
+			r, e := url.Parse("http://" + proxyEntity.Ip + ":" + proxyEntity.Port)
+			if e != nil {
+				panic(e)
+			}
+			p := httputil.NewSingleHostReverseProxy(r)
+			entity.RoutingTable[proxyEntity.Name] = &entity.Route{Proxy: p, Url: r}
+		}
+	}
+
 }
 
 func main() {
@@ -93,6 +110,16 @@ func main() {
 	app.StaticFile("/favicon.ico", "./dist/favicon.ico")                 // 添加资源路径
 	app.StaticFile("/asset-manifest.json", "./dist/asset-manifest.json") // 添加资源路径
 	app.StaticFile("/", "./dist/index.html")                             //前端接口
+
+	app.Any("/app/:name/*path", api.NewProxy)
+
+	proxyApp := app.Group("/api/proxy")
+	{
+		proxyApp.GET("", api.GetProxyEntity)
+		proxyApp.POST("", api.CreateProxyEntity)
+		proxyApp.PUT("", api.UpdateProxyEntity)
+		proxyApp.DELETE("", api.DeleteProxyEntity)
+	}
 
 	app.Run(":" + configData.Port)
 
